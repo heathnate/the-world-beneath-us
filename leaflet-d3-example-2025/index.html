@@ -9,6 +9,16 @@
 <body>
     <div id="my-map"></div>
     
+    <select id="colorBy" onchange="leafletMap.updateColorScheme()">
+        <option value="magnitude">Color by Magnitude</option>
+        <option value="year">Color by Year</option>
+        <option value="depth">Color by Depth</option>
+    </select>
+
+    <label>
+      <input type="checkbox" id="sizeByMagnitude" checked onchange="leafletMap.toggleSizeByMagnitude()"> Size by Magnitude
+    </label>
+
     <script src="js/d3.v6.min.js"></script>
     <script src="js/leaflet.js"></script>
 

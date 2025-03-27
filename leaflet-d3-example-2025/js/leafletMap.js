@@ -10,6 +10,9 @@ class LeafletMap {
       parentElement: _config.parentElement,
     }
     this.data = _data;
+    this.sizeByMagnitude = true; // Default toggle state
+    this.defaultPointSize = 5; // Default point size (for when not scaling by magnitude)
+
     this.initVis();
   }
   
@@ -46,8 +49,8 @@ class LeafletMap {
     });
 
     vis.theMap = L.map('my-map', {
-      center: [30, 0],
-      zoom: 2,
+      center: [30, 0], // Default center position
+      zoom: 2, // Default zoom level
       maxBounds: [[-90, -180], [90, 180]],
       layers: [vis.base_layer]
     });
@@ -64,10 +67,10 @@ class LeafletMap {
       .range(["#ffefea", "#900000"]); // Light red to dark red
 
     //these are the city locations, displayed as a set of dots 
-    vis.Dots = vis.svg.selectAll('circle')
+    vis.dots = vis.svg.selectAll('circle')
                     .data(vis.data) 
                     .join('circle')
-                        .attr("fill", d =>vis.colorScale(d.mag))  //---- TO DO- color by magnitude 
+                        .attr("fill", d =>vis.colorScale(d.mag)) 
                         .attr("stroke", "black")
                         //Leaflet has to take control of projecting points. 
                         //Here we are feeding the latitude and longitude coordinates to
@@ -76,7 +79,7 @@ class LeafletMap {
                         //We have to select the the desired one using .x or .y
                         .attr("cx", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).x)
                         .attr("cy", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).y) 
-                        .attr("r", d=> d.mag)
+                        .attr("r", vis.calculatePointSize())
                         .on('mouseover', function(event,d) { //function to add mouseover event
                             d3.select(this).transition() //D3 selects the object we have moused over in order to perform operations on it
                               .duration('150') //how long we are transitioning between the two states (works like keyframes)
@@ -90,7 +93,9 @@ class LeafletMap {
                                   // Format number with million and thousand separator
                                 .html(`<div class="tooltip-label">Magnitude: ${d.mag}</div> 
                                        <div class="tooltip-label">Place: ${(d.place)}</div>
-                                       <div class="tooltip-label">Time: ${d.time}</div>`);
+                                       <div class="tooltip-label">Local Time: ${d.localDateAndTime}</div>
+                                       <div class="tooltip-label">Depth: ${d.depth} km</div>
+                                    `);
 
                           })
                         .on('mousemove', (event) => {
@@ -99,37 +104,32 @@ class LeafletMap {
                              .style('left', (event.pageX + 10) + 'px')   
                               .style('top', (event.pageY + 10) + 'px');
                          })              
-                        .on('mouseleave', function() { //function to add mouseover event
-                            d3.select(this).transition() //D3 selects the object we have moused over in order to perform operations on it
-                              .duration('150') //how long we are transitioning between the two states (works like keyframes)
-                              .attr("fill", d =>vis.colorScale(d.mag)) //change the fill  TO DO- change fill again
-                              .attr('r', d=>d.mag) //change radius
+                        .on('mouseleave', function() { // function to handle mouseleave event
+                            d3.select(this).transition() // D3 selects the object we have moused over
+                                .duration('150') // Transition duration
+                                .attr("fill", vis.getColorValues()) // Reset the fill color
+                                .attr('r', vis.calculatePointSize()); // Reset radius based on zoom level
 
-                            d3.select('#tooltip').style('opacity', 0);//turn off the tooltip
+                            d3.select('#tooltip').style('opacity', 0); // Hide the tooltip
+                        });
 
-                          })
-    
-    //handler here for updating the map, as you zoom in and out           
-    vis.theMap.on("zoomend", function(){
+    // Event listener to update point size after zooming in/out
+    vis.theMap.on("zoomend", function() {
       vis.updateVis();
+      vis.dots.attr('r', vis.calculatePointSize());
     });
 
   }
 
   updateVis() {
-    let vis = this;
-
-    //want to see how zoomed in you are? 
-    // console.log(vis.map.getZoom()); //how zoomed am I?
-    //----- maybe you want to use the zoom level as a basis for changing the size of the points... ?
-    
+    let vis = this;    
    
    //redraw based on new zoom- need to recalculate on-screen position
-    vis.Dots
+    vis.dots
       .attr("cx", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).x)
       .attr("cy", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).y)
-      .attr("fill", d =>vis.colorScale(d.mag))  //---- TO DO- color by magnitude 
-      .attr("r", d=> d.mag); 
+      .attr("fill", vis.getColorValues())  //---- TO DO- color by magnitude 
+      .attr("r", vis.calculatePointSize()); 
 
   }
 
@@ -139,5 +139,50 @@ class LeafletMap {
 
     //not using right now... 
  
+  }
+
+  updateColorScheme() {
+    let vis = this;
+
+    const colorBy = document.getElementById('colorBy').value;
+    if (colorBy === 'magnitude') {
+        vis.colorScale.domain([0, d3.max(vis.data, d => d.mag)]).range(["#ffefea", "#900000"]);
+    } else if (colorBy === 'year') {
+        vis.colorScale.domain(d3.extent(vis.data, d => new Date(d.time).getFullYear())).range(["#d4f0ff", "#00509e"]);
+    } else if (colorBy === 'depth') {
+        vis.colorScale.domain([0, d3.max(vis.data, d => d.depth)]).range(["#f7e1d7", "#7a1e00"]);
+    }
+    vis.updateVis();
+  }
+
+  getColorValues() {
+    let vis = this;
+
+    const colorBy = document.getElementById('colorBy').value;
+    if (colorBy === 'magnitude') {
+      return d => vis.colorScale(d.mag);
+    } else if (colorBy === 'year') {
+      return d => vis.colorScale(new Date(d.time).getFullYear());
+    } else if (colorBy === 'depth') {
+      return d => vis.colorScale(d.depth);
+    }
+
+  }
+
+  toggleSizeByMagnitude() {
+    let vis = this;
+    const sizeByMagnitude = document.getElementById('sizeByMagnitude').checked;
+    vis.sizeByMagnitude = sizeByMagnitude; // Store the toggle state
+    vis.updateVis();
+  }
+
+  calculatePointSize() {
+    let vis = this;
+    const zoomLevel = vis.theMap.getZoom();
+    if (vis.sizeByMagnitude) {
+      return d => Math.max(2, d.mag * (zoomLevel / 4)); // Scale size by zoom
+    } else {
+      return d => vis.defaultPointSize * (zoomLevel / 4);
+    }
   }
 }
