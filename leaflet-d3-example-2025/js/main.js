@@ -20,23 +20,54 @@ d3.csv('data/2024-2025.csv')
         leafletMap.updateVis(); // Ensure the map updates
       }
     );
+
+    // Auto-apply filter when date inputs change
+    const startDateInput = document.getElementById('start-date');
+    const endDateInput = document.getElementById('end-date');
+
+    function applyDateFilter() {
+      const startDate = new Date(startDateInput.value);
+      const endDate = new Date(endDateInput.value);
+
+      if (startDate && endDate && startDate <= endDate) {
+        // Filter data based on the selected date range
+        const filteredData = data.filter(
+          (d) => d.time >= startDate && d.time <= endDate
+        );
+
+        // Update the time-series chart and map
+        timeSeriesChart.data = filteredData;
+        timeSeriesChart.updateVis();
+        leafletMap.data = filteredData;
+        leafletMap.updateVis();
+      }
+    }
+
+    startDateInput.addEventListener('change', applyDateFilter);
+    endDateInput.addEventListener('change', applyDateFilter);
+
+    // Reset button to restore full data range
+    document.getElementById('reset-date-filter').addEventListener('click', () => {
+      // Reset date inputs
+      startDateInput.value = '';
+      endDateInput.value = '';
+
+      // Restore full data range
+      timeSeriesChart.data = data;
+      timeSeriesChart.updateVis();
+      leafletMap.data = data;
+      leafletMap.updateVis();
+    });
   })
   .catch(error => console.error(error));
 
 function preprocessQuakeData(rawData) {
-  rawData = rawData
-      .filter(d => d.latitude && d.longitude && d.mag && d.depth) // Remove missing data
-      .filter(d => d.mag >= 4.0) // Focus on major earthquakes
-      .map(d => ({
-          ...d,
-          localDateAndTime: new Date(d.time).toLocaleString(), // Convert to local time
+  return rawData.map(d => ({
+    ...d,
+    time: new Date(d.time), // Ensure time is a Date object
+    latitude: +d.latitude,
+    longitude: +d.longitude,
+    mag: +d.mag,
+    depth: +d.depth,
   }));
-  rawData.forEach(d => {
-    d.time = new Date(d.time); // Convert to date object
-    d.latitude = +d.latitude; // Convert to number
-    d.longitude = +d.longitude; // Convert to number
-    d.mag = +d.mag; // Convert to number
-    d.depth = +d.depth; // Convert to number
-  });
-  return rawData;
 }

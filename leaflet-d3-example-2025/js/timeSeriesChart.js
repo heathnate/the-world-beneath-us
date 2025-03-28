@@ -75,14 +75,16 @@ class TimeSeriesChart {
     // Aggregate data by day
     const aggregatedData = d3.rollups(
       vis.data,
-      (v) => v.length,
-      (d) => d3.timeDay(new Date(d.time))
+      (v) => v.length, // Count the number of occurrences
+      (d) => d3.timeDay(new Date(d.time)).getTime() // Group by day (as a timestamp)
     );
 
-    vis.aggregatedData = aggregatedData.map(([date, count]) => ({
-      date,
+    vis.aggregatedData = aggregatedData.map(([timestamp, count]) => ({
+      date: new Date(timestamp), // Convert timestamp back to Date
       count,
     }));
+
+    console.log("Aggregated Data:", vis.aggregatedData); // Debugging
 
     // Update scales
     vis.xScale.domain(d3.extent(vis.aggregatedData, (d) => d.date));

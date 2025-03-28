@@ -16,12 +16,22 @@
     <label>
       <input type="checkbox" id="sizeByMagnitude" checked onchange="leafletMap.toggleSizeByMagnitude()"> Size by Magnitude
     </label>
-
+    
     <select id="mapBackground" onchange="leafletMap.updateMapBackground()">
         <option value="street">Street Map</option>
         <option value="topo">Topographic Map</option>
         <option value="satellite">Satellite Map</option>
     </select>
+
+    <div id="date-selection">
+      <label for="start-date">Start Date:</label>
+      <input type="date" id="start-date">
+      
+      <label for="end-date">End Date:</label>
+      <input type="date" id="end-date">
+      
+      <button id="reset-date-filter">Reset</button>
+    </div>
 
     <div id="my-map"></div>
     <div id="time-series-chart"></div>
