@@ -35,13 +35,7 @@ class LeafletMap {
     vis.thOutUrl = 'https://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png?apikey={apikey}';
     vis.thOutAttr = '&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 
-    //Stamen Terrain
-    vis.stUrl = 'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}';
-    vis.stAttr = 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
-
-    //this is the base map layer, where we are showing the map background
-    //**** TO DO - try different backgrounds 
-
+    // This is the base map layer, where we are showing the map background
     vis.base_layer = L.tileLayer('https://tile.openstreetmap.de/{z}/{x}/{y}.png', {
       maxZoom: 18,
       minZoom: 1,
@@ -63,7 +57,8 @@ class LeafletMap {
     vis.svg = vis.overlay.select('svg').attr("pointer-events", "auto")    
 
     vis.colorScale = d3.scaleLinear()
-      .domain([0, d3.max(vis.data, d => d.mag)]) // Adjust the domain based on your data
+      // .domain([0, d3.max(vis.data, d => d.mag)]) // Adjust the domain based on your data
+      .domain(d3.extent(vis.data, d => d.mag))
       .range(["#ffefea", "#900000"]); // Light red to dark red
 
     //these are the city locations, displayed as a set of dots 
@@ -146,11 +141,13 @@ class LeafletMap {
 
     const colorBy = document.getElementById('colorBy').value;
     if (colorBy === 'magnitude') {
-        vis.colorScale.domain([0, d3.max(vis.data, d => d.mag)]).range(["#ffefea", "#900000"]);
+      //Design choice: Do we want to set the color scale to the extent of the data, or from 0 to the max? The extent option shows a more stark contrast
+      // vis.colorScale.domain([0, d3.max(vis.data, d => d.mag)]).range(["#ffefea", "#900000"]);
+        vis.colorScale.domain(d3.extent(vis.data, d => d.mag)).range(["#ffefea", "#900000"]);
     } else if (colorBy === 'year') {
         vis.colorScale.domain(d3.extent(vis.data, d => new Date(d.time).getFullYear())).range(["#d4f0ff", "#00509e"]);
     } else if (colorBy === 'depth') {
-        vis.colorScale.domain([0, d3.max(vis.data, d => d.depth)]).range(["#f7e1d7", "#7a1e00"]);
+        vis.colorScale.domain([0, d3.max(vis.data, d => d.depth)]).range(["#e6ffe6", "#004d00"]);
     }
     vis.updateVis();
   }
@@ -166,7 +163,6 @@ class LeafletMap {
     } else if (colorBy === 'depth') {
       return d => vis.colorScale(d.depth);
     }
-
   }
 
   toggleSizeByMagnitude() {
@@ -174,6 +170,39 @@ class LeafletMap {
     const sizeByMagnitude = document.getElementById('sizeByMagnitude').checked;
     vis.sizeByMagnitude = sizeByMagnitude; // Store the toggle state
     vis.updateVis();
+  }
+
+  updateMapBackground() {
+    let vis = this;
+    let mapUrl = '';
+    let mapAttr = '';
+    const mapBg = document.getElementById('mapBackground').value; // Get the selected map background option
+
+    // Determine the URL and attribution based on the selected option
+    if (mapBg === 'street') {
+        mapUrl = 'https://tile.openstreetmap.de/{z}/{x}/{y}.png';
+        mapAttr = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
+    } else if (mapBg === 'topo') {
+        mapUrl = 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png';
+        mapAttr = 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)';
+    } else if (mapBg === 'satellite') {
+        mapUrl = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
+        mapAttr = 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community';
+    }
+
+    // Remove the current base layer if it exists
+    if (vis.base_layer) {
+        vis.theMap.removeLayer(vis.base_layer);
+    }
+
+    // Add the new base layer
+    vis.base_layer = L.tileLayer(mapUrl, {
+        maxZoom: 18,
+        minZoom: 1,
+        attribution: mapAttr
+    });
+
+    vis.base_layer.addTo(vis.theMap); // Add the new layer to the map
   }
 
   calculatePointSize() {

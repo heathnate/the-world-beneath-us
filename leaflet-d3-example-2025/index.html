@@ -7,8 +7,6 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div id="my-map"></div>
-    
     <select id="colorBy" onchange="leafletMap.updateColorScheme()">
         <option value="magnitude">Color by Magnitude</option>
         <option value="year">Color by Year</option>
@@ -18,6 +16,14 @@
     <label>
       <input type="checkbox" id="sizeByMagnitude" checked onchange="leafletMap.toggleSizeByMagnitude()"> Size by Magnitude
     </label>
+
+    <select id="mapBackground" onchange="leafletMap.updateMapBackground()">
+        <option value="street">Street Map</option>
+        <option value="topo">Topographic Map</option>
+        <option value="satellite">Satellite Map</option>
+    </select>
+
+    <div id="my-map"></div>
 
     <script src="js/d3.v6.min.js"></script>
     <script src="js/leaflet.js"></script>
