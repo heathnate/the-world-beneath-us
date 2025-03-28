@@ -1,12 +1,25 @@
-d3.csv('data/2024-2025.csv')  //**** TO DO  switch this to loading the quakes 'data/2024-2025.csv'
-.then(data => {
-    // Preprocess data    
+d3.csv('data/2024-2025.csv')
+  .then(data => {
     data = preprocessQuakeData(data);
 
-    // Initialize chart and then show it
-    leafletMap = new LeafletMap({ parentElement: '#my-map'}, data);
+    // Initialize the map
+    leafletMap = new LeafletMap({ parentElement: '#my-map' }, data);
 
+    // Initialize the time-series chart
+    const timeSeriesChart = new TimeSeriesChart(
+      { parentElement: '#time-series-chart' },
+      data,
+      (startDate, endDate) => {
+        // Filter data based on the selected time range
+        const filteredData = data.filter(
+          (d) => d.time >= startDate && d.time <= endDate
+        );
 
+        // Update the map with filtered data
+        leafletMap.data = filteredData;
+        leafletMap.updateVis(); // Ensure the map updates
+      }
+    );
   })
   .catch(error => console.error(error));
 
