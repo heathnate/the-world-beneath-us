@@ -1,9 +1,17 @@
+let leafletMap, barChart, magnitudeBarChart, depthBarChart;
+
 d3.csv('data/2024-2025.csv')
   .then(data => {
     data = preprocessQuakeData(data);
 
     // Initialize the map
     leafletMap = new LeafletMap({ parentElement: '#my-map' }, data);
+
+    // Initialize the magnitude bar chart
+    magnitudeBarChart = new MagnitudeBarChart({ parentElement: '#magnitude-bar-chart' }, data);
+
+    // Initialize the depth bar chart
+    depthBarChart = new DepthBarChart({ parentElement: '#depth-bar-chart' }, data);
 
     // Initialize the time-series chart
     const timeSeriesChart = new TimeSeriesChart(

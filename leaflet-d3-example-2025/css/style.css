@@ -1,5 +1,5 @@
 #my-map {
-  width: 100%;
+  width: 70%;
   height: 500px;
 }
 
@@ -33,4 +33,72 @@
 #date-selection input, #date-selection button {
   padding: 5px;
   font-size: 14px;
+}
+
+#bar-chart-container {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 29%;
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#bar-chart {
+  flex-grow: 1;
+  border: 1px solid #ddd;
+  background: #f9f9f9;
+  position: relative;
+}
+
+#bar-chart-container select {
+  padding: 5px;
+  font-size: 14px;
+}
+
+/* Main container for the map and charts */
+#map-bar-charts {
+  display: flex;
+  flex-direction: row;
+  height: 70vh; /* Take up 70% of the viewport height */
+  gap: 10px;
+  overflow: hidden; /* Prevent content from overflowing */
+}
+
+/* Map styling */
+#my-map {
+  flex: 2; /* Take up more space for the map */
+  height: 100%; /* Fill the available height */
+  border: 1px solid #ddd; /* Optional: Add a border for clarity */
+}
+
+/* Bar charts container styling */
+#bar-charts-container {
+  flex: 1; /* Take up less space for the bar charts */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%; /* Fill the available height */
+}
+
+/* Individual bar chart styling */
+#magnitude-bar-chart,
+#depth-bar-chart {
+  flex: 1; /* Each bar chart takes up equal space */
+  border: 1px solid #ddd;
+  background: #f9f9f9;
+  padding: 10px;
+  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Time series chart styling */
+#time-series-chart {
+  height: 30vh; /* Take up the remaining 30% of the viewport height */
+  width: 100%; /* Fill the width of the page */
+  border: 1px solid #ddd;
+  background: #f9f9f9;
+  padding: 10px;
+  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
 }
