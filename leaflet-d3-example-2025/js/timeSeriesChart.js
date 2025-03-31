@@ -116,4 +116,21 @@ class TimeSeriesChart {
           .y((d) => vis.yScale(d.count))
       );
   }
+
+  highlightTime(time) {
+    let vis = this;
+
+    // Highlight the corresponding time on the timeline
+    vis.chart
+      .selectAll('.highlight-line')
+      .data([time])
+      .join('line')
+      .attr('class', 'highlight-line')
+      .attr('x1', d => vis.xScale(d))
+      .attr('x2', d => vis.xScale(d))
+      .attr('y1', 0)
+      .attr('y2', vis.height)
+      .attr('stroke', 'red')
+      .attr('stroke-width', 2);
+  }
 }

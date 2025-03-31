@@ -130,4 +130,16 @@ class DepthBarChart {
         this.filteredData = filteredData; // Update the filtered data
         this.updateVis(); // Re-render the visualization
     }
+
+    highlightDepth(depth) {
+      let vis = this;
+  
+      // Find the bin that contains the magnitude
+      const bin = vis.svg.selectAll('.bar')
+        .filter(d => d.x0 <= depth && depth < d.x1);
+  
+      // Highlight the corresponding bar
+      vis.svg.selectAll('.bar').classed('highlighted', false); // Clear previous highlights
+      bin.classed('highlighted', true);
+    }
 }
