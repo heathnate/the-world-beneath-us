@@ -81,7 +81,7 @@ class LeafletMap {
           .style('z-index', 1000000)
           .html(`<div class="tooltip-label">Magnitude: ${d.mag}</div> 
                  <div class="tooltip-label">Place: ${(d.place)}</div>
-                 <div class="tooltip-label">Local Time: ${d.localDateAndTime}</div>
+                 <div class="tooltip-label">Time: ${d.time}</div>
                  <div class="tooltip-label">Depth: ${d.depth} km</div>`);
       })
       .on('mousemove', (event) => {
