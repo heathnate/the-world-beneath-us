@@ -127,8 +127,6 @@ class LeafletMap {
       .attr("cy", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).y)
       .attr("fill", vis.getColorValues())  //---- TO DO- color by magnitude 
       .attr("r", vis.calculatePointSize())
-      .attr("stroke","black"); 
-      .attr("r", vis.calculatePointSize())
       .attr("stroke","black");
 
   }
