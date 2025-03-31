@@ -118,13 +118,16 @@ class LeafletMap {
 
   updateVis() {
     let vis = this;    
-   
+
    //redraw based on new zoom- need to recalculate on-screen position
-    vis.dots
+    vis.svg.selectAll("circle")
+      .data(vis.data)
+      .join("circle")
       .attr("cx", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).x)
       .attr("cy", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).y)
       .attr("fill", vis.getColorValues())  //---- TO DO- color by magnitude 
-      .attr("r", vis.calculatePointSize()); 
+      .attr("r", vis.calculatePointSize())
+      .attr("stroke","black");
 
   }
 

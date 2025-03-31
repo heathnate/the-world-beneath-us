@@ -84,27 +84,94 @@ function preprocessQuakeData(rawData) {
   }));
 }
 function filterData() {
+  let fdata;
+  let filarr = [false, false, false, false];
   if (difficultyFilter.length == 0) {
-    leafletMap.data = data;
+    fdata = data;
   } else {
     //based on the length of the bar we know which data we want filtered
     if(difficultyFilter.includes(12501))
     {
-      leafletMap.data = data.filter(d => (4 <= d.mag && d.mag < 5));
+      //4-5
+      filarr[0] = true;
     }
     if(difficultyFilter.includes(1461))
     {
-      leafletMap.data = data.filter(d => (5 <= d.mag && d.mag < 6));
+      //5-6
+      filarr[1] = true;
     }
     if(difficultyFilter.includes(4279))
     {
-      leafletMap.data = data.filter(d => (3 <= d.mag && d.mag < 4));
+      //3-4
+      filarr[2] = true;
     }
     if(difficultyFilter.includes(84))
     {
-      leafletMap.data = data.filter(d => (6 <= d.mag && d.mag < 7));
+      //6-7
+      filarr[3] = true;
     }
-    //leafletMap.data = data.filter(d => difficultyFilter.includes(d.mag));
+    if(filarr[0] && filarr[1] && filarr[2] && filarr[3])
+    {
+      fdata = data.filter(d => ((6 <= d.mag && d.mag < 7) || (3 <= d.mag && d.mag < 4) || (5 <= d.mag && d.mag < 6) || (4 <= d.mag && d.mag < 5)));
+    }
+    else if(filarr[0] && filarr[1] && filarr[2])
+    {
+      fdata = data.filter(d => ((3 <= d.mag && d.mag < 4) || (5 <= d.mag && d.mag < 6) || (4 <= d.mag && d.mag < 5)));
+    }
+    else if(filarr[0] && filarr[2] && filarr[3])
+    {
+      fdata = data.filter(d => ((6 <= d.mag && d.mag < 7) || (3 <= d.mag && d.mag < 4) || (4 <= d.mag && d.mag < 5)));
+    }
+    else if(filarr[0] && filarr[1] && filarr[3])
+    {
+      fdata = data.filter(d => ((6 <= d.mag && d.mag < 7) || (5 <= d.mag && d.mag < 6) || (4 <= d.mag && d.mag < 5)));
+    }
+    else if(filarr[1] && filarr[2] && filarr[3])
+    {
+      fdata = data.filter(d => ((6 <= d.mag && d.mag < 7) || (3 <= d.mag && d.mag < 4) || (5 <= d.mag && d.mag < 6)));
+    }
+    else if(filarr[0] && filarr[1])
+    {
+      fdata = data.filter(d => ((5 <= d.mag && d.mag < 6) || (4 <= d.mag && d.mag < 5)));
+    }
+    else if(filarr[0] && filarr[2])
+    {
+      fdata = data.filter(d => ((3 <= d.mag && d.mag < 4) || (4 <= d.mag && d.mag < 5)));
+    }
+    else if(filarr[0] && filarr[3])
+    {
+      fdata = data.filter(d => ((6 <= d.mag && d.mag < 7) || (4 <= d.mag && d.mag < 5)));
+    }
+    else if(filarr[1] && filarr[2])
+    {
+      fdata = data.filter(d => ((3 <= d.mag && d.mag < 4) || (5 <= d.mag && d.mag < 6)));
+    }
+    else if(filarr[1] && filarr[3])
+    {
+      fdata = data.filter(d => ((6 <= d.mag && d.mag < 7) || (5 <= d.mag && d.mag < 6)));
+    }
+    else if(filarr[2] && filarr[3])
+    {
+      fdata = data.filter(d => ((6 <= d.mag && d.mag < 7) || (3 <= d.mag && d.mag < 4)));
+    }
+    else if(filarr[0])
+    {
+      fdata = data.filter(d => (4 <= d.mag && d.mag < 5));
+    }
+    else if(filarr[1])
+    {
+      fdata = data.filter(d => (5 <= d.mag && d.mag < 6));
+    }
+    else if(filarr[2])
+    {
+      fdata = data.filter(d => (3 <= d.mag && d.mag < 4));
+    }
+    else
+    {
+      fdata = data.filter(d => (6 <= d.mag && d.mag < 7));
+    }
   }
+  console.log(fdata);
+  leafletMap.data = fdata;
   leafletMap.updateVis();
 }
