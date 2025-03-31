@@ -1,4 +1,4 @@
-let leafletMap, barChart, magnitudeBarChart, depthBarChart;
+let leafletMap, barChart, magnitudeBarChart, depthBarChart, timeSeriesChart;
 let data;
 
 let difficultyFilter = [];
@@ -18,7 +18,7 @@ d3.csv('data/2024-2025.csv')
     depthBarChart = new DepthBarChart({ parentElement: '#depth-bar-chart' }, data);
 
     // Initialize the time-series chart
-    const timeSeriesChart = new TimeSeriesChart(
+    timeSeriesChart = new TimeSeriesChart(
       { parentElement: '#time-series-chart' },
       data,
       (startDate, endDate) => {
@@ -341,4 +341,42 @@ function filterData() {
   console.log(ndata);
   leafletMap.data = ndata;
   leafletMap.updateVis();
+}
+
+let animation_interval;
+const animation_progress_bar = document.getElementById("animation-progress");
+console.log(animation_progress_bar);
+function animation_filter() {
+  const aniwindow = parseInt(document.getElementById("animation-window").value);
+  var [speed, step] = document.getElementById("animation-speed").value.split(' ').map((n) => parseInt(n));
+
+
+  clearInterval(animation_interval);
+
+  const range = timeSeriesChart.xScale.domain();
+  const nrange = (range[1].getTime() + 1000 * 60 * 60 * 24 * aniwindow - range[0].getTime());
+  var d1 = new Date(range[0].getTime());
+  var d0 = new Date(range[0].getTime());
+  d0.setDate(d0.getDate() - aniwindow);
+  var filteredData;
+
+  const animate = () => {
+    d1.setDate(d1.getDate() + step);
+    d0.setDate(d0.getDate() + step);
+    if (d0 >= range[1]) {
+      filteredData = data;
+      clearInterval(animation_interval);
+      animation_progress_bar.value = 0;
+    }
+    else {
+      filteredData = data.filter(
+        (d) => d.time >= d0 && d.time <= d1
+      );
+      animation_progress_bar.value = 100 * (d1.getTime() - range[0].getTime()) / nrange;
+    }
+    leafletMap.data = filteredData;
+    leafletMap.updateVis();
+  }
+
+  animation_interval = setInterval(animate, 1000 / speed);
 }
