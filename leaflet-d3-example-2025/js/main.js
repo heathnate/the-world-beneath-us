@@ -1,4 +1,4 @@
-let leafletMap, barChart, magnitudeBarChart, depthBarChart, timeSeriesChart;
+let leafletMap, barChart, magnitudeBarChart, depthBarChart, timeSeriesChart, startDateInput, endDateInput;
 let data;
 
 let difficultyFilter = [];
@@ -37,29 +37,11 @@ d3.csv('data/2024-2025.csv')
     );
 
     // Auto-apply filter when date inputs change
-    const startDateInput = document.getElementById('start-date');
-    const endDateInput = document.getElementById('end-date');
+    startDateInput = document.getElementById('start-date');
+    endDateInput = document.getElementById('end-date');
 
-    function applyDateFilter() {
-      const startDate = new Date(startDateInput.value);
-      const endDate = new Date(endDateInput.value);
-
-      if (startDate && endDate && startDate <= endDate) {
-        // Filter data based on the selected date range
-        const filteredData = data.filter(
-          (d) => d.time >= startDate && d.time <= endDate
-        );
-
-        // Update the time-series chart and map
-        timeSeriesChart.data = filteredData;
-        timeSeriesChart.updateVis();
-        leafletMap.data = filteredData;
-        leafletMap.updateVis();
-      }
-    }
-
-    startDateInput.addEventListener('change', applyDateFilter);
-    endDateInput.addEventListener('change', applyDateFilter);
+    startDateInput.addEventListener('change', filterData);
+    endDateInput.addEventListener('change', filterData);
 
     // Reset button to restore full data range
     document.getElementById('reset-date-filter').addEventListener('click', () => {
@@ -87,258 +69,120 @@ function preprocessQuakeData(rawData) {
   }));
 }
 function filterData() {
-  let fdata, bdata, ndata, a, b, c, e, f, g, h, i, j;
-  let filarr = [false, false, false, false];
+  let fdata, bdata, ndata, filteredData, check, check2;
+  let a, b, c, e, f, g, h, i, j, k, l;
+  check = false;
+  check2 = false;
   fdata = data;
   bdata = data;
+  filteredData = data;
+  a = data.filter(d => (0 > d.mag));
+  b = data.filter(d => (0 > d.mag));
+  c = data.filter(d => (0 > d.mag));
+  e = data.filter(d => (0 > d.mag));
+  f = data.filter(d => (0 > d.mag));
+  g = data.filter(d => (0 > d.mag));
+  h = data.filter(d => (0 > d.mag));
+  i = data.filter(d => (0 > d.mag));
+  j = data.filter(d => (0 > d.mag));
+  k = data.filter(d => (0 > d.mag));
+  l = data.filter(d => (0 > d.mag));
   if (difficultyFilter.length == 0) {
     fdata = data;
-    bdata = fdata;
+    bdata = data;
   } else {
     //based on the length of the bar we know which data we want filtered
     if(difficultyFilter.includes(12501))
     {
       //4-5
       a = data.filter(d => (4 <= d.mag && d.mag < 5));
-      filarr[0] = true;
+      check = true;
     }
     if(difficultyFilter.includes(1461))
     {
       //5-6
       b = data.filter(d => ((5 <= d.mag && d.mag < 6)));
-      filarr[1] = true;
+      check = true;
     }
     if(difficultyFilter.includes(4279))
     {
       //3-4
       c = data.filter(d => ((3 <= d.mag && d.mag < 4)));
-      filarr[2] = true;
+      check = true;
     }
     if(difficultyFilter.includes(84))
     {
       //6-7
       e = data.filter(d => ((6 <= d.mag && d.mag < 7)));
-      filarr[3] = true;
+      check = true;
     }
     if(difficultyFilter.includes(14268))
     {
       //0-100
       f = data.filter(d => ((0 <= d.depth && d.depth < 100)));
-      filarr[4] = true;
+      check2 = true;
     }
     if(difficultyFilter.includes(2307))
     {
       //100-200
       g = data.filter(d => ((100 <= d.depth && d.depth < 200)));
-      filarr[5] = true;
+      check2 = true;
     }
     if(difficultyFilter.includes(549))
     {
       //200-300
       h = data.filter(d => ((200 <= d.depth && d.depth < 300)));
-      filarr[6] = true;
+      check2 = true;
     }
     if(difficultyFilter.includes(184))
     {
       //300-400
       i = data.filter(d => ((300 <= d.depth && d.depth < 400)));
-      filarr[7] = true;
+      check2 = true;
     }
     if(difficultyFilter.includes(224))
     {
       //400-500
       j = data.filter(d => ((400 <= d.depth && d.depth < 500)));
-      filarr[8] = true;
+      check2 = true;
     }
-    if(filarr[0] && filarr[1] && filarr[2] && filarr[3])
+    if(difficultyFilter.includes(645))
     {
-      fdata = data.filter(d => (c.includes(d) || e.includes(d) || b.includes(d) || a.includes(d)));
+      //500-600
+      k = data.filter(d => ((500 <= d.depth && d.depth < 600)));
+      check2 = true;
     }
-    else if(filarr[0] && filarr[1] && filarr[2])
+    if(difficultyFilter.includes(127))
     {
-      fdata = data.filter(d => (c.includes(d) || b.includes(d) || a.includes(d)));
+      //600-700
+      l = data.filter(d => ((600 <= d.depth && d.depth < 700)));
+      check2 = true;
     }
-    else if(filarr[0] && filarr[2] && filarr[3])
+    if(check)
     {
-      fdata = data.filter(d => (c.includes(d) || e.includes(d) || a.includes(d)));
+      fdata = data.filter(d => (a.includes(d) || b.includes(d) || c.includes(d) || e.includes(d)));
     }
-    else if(filarr[0] && filarr[1] && filarr[3])
+    if(check2)
     {
-      fdata = data.filter(d => (e.includes(d) || b.includes(d) || a.includes(d)));
-    }
-    else if(filarr[1] && filarr[2] && filarr[3])
-    {
-      fdata = data.filter(d => (c.includes(d) || e.includes(d) || b.includes(d)));
-    }
-    else if(filarr[0] && filarr[1])
-    {
-      fdata = data.filter(d => (b.includes(d) || a.includes(d)));
-    }
-    else if(filarr[0] && filarr[2])
-    {
-      fdata = data.filter(d => (c.includes(d) || a.includes(d)));
-    }
-    else if(filarr[0] && filarr[3])
-    {
-      fdata = data.filter(d => (e.includes(d) || a.includes(d)));
-    }
-    else if(filarr[1] && filarr[2])
-    {
-      fdata = data.filter(d => (c.includes(d) || b.includes(d)));
-    }
-    else if(filarr[1] && filarr[3])
-    {
-      fdata = data.filter(d => (e.includes(d) || b.includes(d)));
-    }
-    else if(filarr[2] && filarr[3])
-    {
-      fdata = data.filter(d => (c.includes(d) || e.includes(d)));
-    }
-    else if(filarr[0])
-    {
-      fdata = data.filter(d => a.includes(d));
-    }
-    else if(filarr[1])
-    {
-      fdata = data.filter(d => b.includes(d));
-    }
-    else if(filarr[2])
-    {
-      fdata = data.filter(d => c.includes(d));
-    }
-    else if(filarr[3])
-    {
-      fdata = data.filter(d => e.includes(d));
-    }
-
-    // filter based on depth chart
-    if(filarr[4] && filarr[5] && filarr[6] && filarr[7] && filarr[8])
-    {
-      bdata = data.filter(d => (f.includes(d) || g.includes(d) || h.includes(d) || i.includes(d) || j.includes(d)));
-    }
-    else if(filarr[4] && filarr[5] && filarr[6] && filarr[7])
-    {
-      bdata = data.filter(d => (f.includes(d) || g.includes(d) || h.includes(d) || i.includes(d)));
-    }
-    else if(filarr[4] && filarr[5] && filarr[6] && filarr[8])
-    {
-      bdata = data.filter(d => (f.includes(d) || g.includes(d) || h.includes(d) || j.includes(d)));
-    }
-    else if(filarr[4] && filarr[5] && filarr[8] && filarr[7])
-    {
-      bdata = data.filter(d => (f.includes(d) || g.includes(d) || i.includes(d) || j.includes(d)));
-    }
-    else if(filarr[4] && filarr[8] && filarr[6] && filarr[7])
-    {
-      bdata = data.filter(d => (f.includes(d) || h.includes(d) || i.includes(d) || j.includes(d)));
-    }
-    else if(filarr[8] && filarr[5] && filarr[6] && filarr[7])
-    {
-      bdata = data.filter(d => (g.includes(d) || h.includes(d) || i.includes(d) || j.includes(d)));
-    }
-    else if(filarr[4] && filarr[5] && filarr[6])
-    {
-      bdata = data.filter(d => (f.includes(d) || g.includes(d) || h.includes(d)));
-    }
-    else if(filarr[4] && filarr[5] && filarr[7])
-    {
-      bdata = data.filter(d => (f.includes(d) || g.includes(d) || i.includes(d)));
-    }
-    else if(filarr[4] && filarr[5] && filarr[8])
-    {
-      bdata = data.filter(d => (f.includes(d) || g.includes(d) || j.includes(d)));
-    }
-    else if(filarr[4] && filarr[6] && filarr[7])
-    {
-      bdata = data.filter(d => (f.includes(d) || h.includes(d) || i.includes(d)));
-    }
-    else if(filarr[4] && filarr[6] && filarr[8])
-    {
-      bdata = data.filter(d => (f.includes(d) || h.includes(d) || j.includes(d)));
-    }
-    else if(filarr[4] && filarr[7] && filarr[8])
-    {
-      bdata = data.filter(d => (f.includes(d) || i.includes(d) || j.includes(d)));
-    }
-    else if(filarr[5] && filarr[6] && filarr[7])
-    {
-      bdata = data.filter(d => (g.includes(d) || h.includes(d) || i.includes(d)));
-    }
-    else if(filarr[5] && filarr[6] && filarr[8])
-    {
-      bdata = data.filter(d => (g.includes(d) || h.includes(d) || j.includes(d)));
-    }
-    else if(filarr[5] && filarr[7] && filarr[8])
-    {
-      bdata = data.filter(d => (g.includes(d) || i.includes(d) || j.includes(d)));
-    }
-    else if(filarr[6] && filarr[8] && filarr[7])
-    {
-      bdata = data.filter(d => (h.includes(d) || i.includes(d) || j.includes(d)));
-    }
-    else if(filarr[4] && filarr[5])
-    {
-      bdata = data.filter(d => (f.includes(d) || g.includes(d)));
-    }
-    else if(filarr[4] && filarr[6])
-    {
-      bdata = data.filter(d => (f.includes(d) || h.includes(d)));
-    }
-    else if(filarr[4] && filarr[7])
-    {
-      bdata = data.filter(d => (f.includes(d) || i.includes(d)));
-    }
-    else if(filarr[4] && filarr[8])
-    {
-      bdata = data.filter(d => (f.includes(d) || j.includes(d)));
-    }
-    else if(filarr[5] && filarr[6])
-    {
-      bdata = data.filter(d => (g.includes(d) || h.includes(d)));
-    }
-    else if(filarr[5] && filarr[7])
-    {
-      bdata = data.filter(d => (g.includes(d) || i.includes(d)));
-    }
-    else if(filarr[5] && filarr[8])
-    {
-      bdata = data.filter(d => (g.includes(d) || j.includes(d)));
-    }
-    else if(filarr[6] && filarr[7])
-    {
-      bdata = data.filter(d => (h.includes(d) || i.includes(d)));
-    }
-    else if(filarr[6] && filarr[8])
-    {
-      bdata = data.filter(d => (h.includes(d) || j.includes(d)));
-    }
-    else if(filarr[7] && filarr[8])
-    {
-      bdata = data.filter(d => (i.includes(d) || j.includes(d)));
-    }
-    else if(filarr[4])
-    {
-      bdata = data.filter(d => f.includes(d));
-    }
-    else if(filarr[5])
-    {
-      bdata = data.filter(d => g.includes(d));
-    }
-    else if(filarr[6])
-    {
-      bdata = data.filter(d => h.includes(d));
-    }
-    else if(filarr[7])
-    {
-      bdata = data.filter(d => i.includes(d));
-    }
-    else if(filarr[8])
-    {
-      bdata = data.filter(d => j.includes(d));
+      bdata = data.filter(d => (f.includes(d) || g.includes(d) || h.includes(d) || i.includes(d) || j.includes(d) || k.includes(d) || l.includes(d)));
     }
   }
-  ndata = data.filter(d => fdata.includes(d) && bdata.includes(d))
+
+  const startDate = new Date(startDateInput.value);
+  const endDate = new Date(endDateInput.value);
+
+  if (startDate && endDate && startDate <= endDate) {
+    // Filter data based on the selected date range
+    filteredData = data.filter((d) => d.time >= startDate && d.time <= endDate);
+
+    // Update the time-series chart
+    timeSeriesChart.data = filteredData;
+    timeSeriesChart.updateVis();
+  }
+
+  ndata = data.filter(d => fdata.includes(d) && bdata.includes(d) && filteredData.includes(d))
   console.log(ndata);
+
   leafletMap.data = ndata;
   leafletMap.updateVis();
 }

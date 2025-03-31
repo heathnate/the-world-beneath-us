@@ -93,6 +93,18 @@
   box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
 }
 
+/* Tooltip styling for bar charts */
+.tooltip {
+  box-shadow: 3px 3px 3px 0px rgb(92 92 92 / 0.5);
+  border: 1px solid #ddd;
+  min-width: 80px;
+  padding-right: 5px;
+  width: auto;
+  height: 20px;
+  background: #fff;
+  position: absolute;
+}
+
 /* Time series chart styling */
 #time-series-chart {
   height: 30vh; /* Take up the remaining 30% of the viewport height */
