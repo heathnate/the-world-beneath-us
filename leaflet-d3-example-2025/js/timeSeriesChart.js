@@ -57,10 +57,16 @@ class TimeSeriesChart {
         [0, 0],
         [vis.width, vis.height],
       ])
-      .on("brush end", function ({ selection }) {
+      .on('brush', function ({selection}) {
         if (selection) {
           const [x0, x1] = selection.map(vis.xScale.invert);
-          vis.onBrush(x0, x1); // Call the callback with the selected range
+          vis.onBrush(x0,x1);
+        };
+      })
+      .on('end', function ({ selection }) {
+        if (!selection) {
+          const [x0, x1] = vis.xScale.domain();
+          vis.onBrush(x0,x1)
         }
       });
 
