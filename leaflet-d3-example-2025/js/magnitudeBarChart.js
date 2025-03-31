@@ -104,6 +104,25 @@ class MagnitudeBarChart {
       })
       .on('mouseleave', () => {
         vis.tooltip.style('opacity', 0);
+      })
+    .join('rect')
+      // ... other attributes ... 
+      .on('click', (event, d) => {
+        // Check if filter is already active
+        const isActive = difficultyFilter.includes(d.length);
+        if (isActive) { 
+          // Remove filter
+          difficultyFilter = difficultyFilter.filter(f => f !== d.length);
+        } else { 
+          // Add filter
+          difficultyFilter.push(d.length);
+          console.log(difficultyFilter);
+        }
+        // Call global function to update scatter plot
+        filterData();
+        
+        // Add class to style active filters with CSS
+        //d3.select(this).classed('active', !isActive);
       });
 
     // Update

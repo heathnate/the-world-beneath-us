@@ -1,7 +1,11 @@
 let leafletMap, barChart, magnitudeBarChart, depthBarChart;
+let data;
+
+let difficultyFilter = [];
 
 d3.csv('data/2024-2025.csv')
-  .then(data => {
+  .then(_data => {
+    data = _data;
     data = preprocessQuakeData(data);
 
     // Initialize the map
@@ -78,4 +82,29 @@ function preprocessQuakeData(rawData) {
     mag: +d.mag,
     depth: +d.depth,
   }));
+}
+function filterData() {
+  if (difficultyFilter.length == 0) {
+    leafletMap.data = data;
+  } else {
+    //based on the length of the bar we know which data we want filtered
+    if(difficultyFilter.includes(12501))
+    {
+      leafletMap.data = data.filter(d => (4 <= d.mag && d.mag < 5));
+    }
+    if(difficultyFilter.includes(1461))
+    {
+      leafletMap.data = data.filter(d => (5 <= d.mag && d.mag < 6));
+    }
+    if(difficultyFilter.includes(4279))
+    {
+      leafletMap.data = data.filter(d => (3 <= d.mag && d.mag < 4));
+    }
+    if(difficultyFilter.includes(84))
+    {
+      leafletMap.data = data.filter(d => (6 <= d.mag && d.mag < 7));
+    }
+    //leafletMap.data = data.filter(d => difficultyFilter.includes(d.mag));
+  }
+  leafletMap.updateVis();
 }
