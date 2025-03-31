@@ -118,7 +118,7 @@ class LeafletMap {
 
   updateVis() {
     let vis = this;    
-   
+
    //redraw based on new zoom- need to recalculate on-screen position
     vis.svg.selectAll("circle")
       .data(vis.data)
@@ -128,6 +128,8 @@ class LeafletMap {
       .attr("fill", vis.getColorValues())  //---- TO DO- color by magnitude 
       .attr("r", vis.calculatePointSize())
       .attr("stroke","black"); 
+      .attr("r", vis.calculatePointSize())
+      .attr("stroke","black");
 
   }
 
