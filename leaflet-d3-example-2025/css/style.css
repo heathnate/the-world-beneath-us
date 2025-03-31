@@ -80,7 +80,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  height: 100%; /* Fill the available height */
+  height: 60%; /* Fill the available height */
 }
 
 /* Individual bar chart styling */
@@ -89,7 +89,7 @@
   flex: 1; /* Each bar chart takes up equal space */
   border: 1px solid #ddd;
   background: #f9f9f9;
-  padding: 10px;
+  padding: 0px;
   box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
 }
 

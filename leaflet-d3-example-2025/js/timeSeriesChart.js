@@ -1,10 +1,9 @@
 class TimeSeriesChart {
   constructor(_config, _data, _onBrush) {
-    const mapWidth = document.getElementById('my-map').offsetWidth; // Dynamically get map width
     this.config = {
       parentElement: _config.parentElement,
-      margin: { top: 20, right: 20, bottom: 40, left: 50 },
-      width: mapWidth, // Set width to match map
+      margin: { top: 20, right: 80, bottom: 40, left: 50 },
+      width: window.innerWidth, // Automatically set to the page width
       height: 200,
     };
     this.data = _data;
@@ -27,7 +26,7 @@ class TimeSeriesChart {
     vis.svg = d3
       .select(vis.config.parentElement)
       .append("svg")
-      .attr("width", vis.config.width)
+      .attr("width", window.innerWidth) // Dynamically set width to page width
       .attr("height", vis.config.height);
 
     vis.chart = vis.svg
@@ -57,16 +56,16 @@ class TimeSeriesChart {
         [0, 0],
         [vis.width, vis.height],
       ])
-      .on('brush', function ({selection}) {
+      .on("brush", function ({ selection }) {
         if (selection) {
           const [x0, x1] = selection.map(vis.xScale.invert);
-          vis.onBrush(x0,x1);
-        };
+          vis.onBrush(x0, x1);
+        }
       })
-      .on('end', function ({ selection }) {
+      .on("end", function ({ selection }) {
         if (!selection) {
           const [x0, x1] = vis.xScale.domain();
-          vis.onBrush(x0,x1)
+          vis.onBrush(x0, x1);
         }
       });
 
