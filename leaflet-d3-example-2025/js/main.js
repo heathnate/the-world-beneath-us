@@ -30,6 +30,9 @@ d3.csv('data/2024-2025.csv')
         // Update the map with filtered data
         leafletMap.data = filteredData;
         leafletMap.updateVis(); // Ensure the map updates
+
+        magnitudeBarChart.setFilteredData(filteredData);
+        depthBarChart.setFilteredData(filteredData);
       }
     );
 

@@ -10,6 +10,8 @@ class DepthBarChart {
     initVis() {
       // Same implementation as MagnitudeBarChart, but with depth-specific labels
       let vis = this;
+
+      vis.filteredData = vis.data; // Initialize filtered data
   
       vis.margin = { top: 20, right: 80, bottom: 70, left: 70 };
       vis.width = 500 - vis.margin.left - vis.margin.right;
@@ -60,10 +62,10 @@ class DepthBarChart {
       let vis = this;
   
       const bin = d3.bin()
-        .domain([0, d3.max(vis.data, vis.attribute)])
+        .domain([0, d3.max(vis.filteredData, vis.attribute)])
         .value(vis.attribute)
         .thresholds(8);
-      const bins = bin(vis.data);
+      const bins = bin(vis.filteredData);
   
       vis.xScale.domain([0, d3.max(bins, d => d.length)]);
       vis.yScale.domain(bins.map(d => `${d.x0}-${d.x1}`));
@@ -122,5 +124,10 @@ class DepthBarChart {
         .attr('fill', vis.barColor);
   
       bars.exit().remove();
+    }
+
+    setFilteredData(filteredData) {
+        this.filteredData = filteredData; // Update the filtered data
+        this.updateVis(); // Re-render the visualization
     }
 }

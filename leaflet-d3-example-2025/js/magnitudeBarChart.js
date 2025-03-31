@@ -10,6 +10,8 @@ class MagnitudeBarChart {
   initVis() {
     let vis = this;
 
+    vis.filteredData = vis.data; // Initialize filtered data
+
     // Set up dimensions and margins
     vis.margin = { top: 20, right: 80, bottom: 70, left: 70 };
     vis.width = 500 - vis.margin.left - vis.margin.right;
@@ -66,10 +68,10 @@ class MagnitudeBarChart {
 
     // Create bins for histogram
     const bin = d3.bin()
-      .domain(d3.extent(vis.data, vis.attribute))
+      .domain(d3.extent(vis.filteredData, vis.attribute))
       .value(vis.attribute)
       .thresholds(5); // Number of bins
-    const bins = bin(vis.data);
+    const bins = bin(vis.filteredData);
 
     // Update scales
     vis.xScale.domain([0, d3.max(bins, d => d.length)]);
@@ -133,5 +135,10 @@ class MagnitudeBarChart {
 
     // Exit
     bars.exit().remove();
+  }
+
+  setFilteredData(filteredData) {
+    this.filteredData = filteredData; // Update the filtered data
+    this.updateVis(); // Re-render the visualization
   }
 }
