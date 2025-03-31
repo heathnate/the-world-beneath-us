@@ -142,6 +142,7 @@ class MagnitudeBarChart {
     this.updateVis(); // Re-render the visualization
   }
 
+  // Highlight a specific magnitude
   highlightMagnitude(magnitude) {
     let vis = this;
 

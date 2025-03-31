@@ -117,6 +117,7 @@ class TimeSeriesChart {
       );
   }
 
+  // Method to highlight a specific time on the timeline
   highlightTime(time) {
     let vis = this;
 

@@ -131,6 +131,7 @@ class DepthBarChart {
         this.updateVis(); // Re-render the visualization
     }
 
+    // Function to highlight the bar corresponding to the clicked depth
     highlightDepth(depth) {
       let vis = this;
   

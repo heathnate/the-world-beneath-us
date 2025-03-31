@@ -241,7 +241,7 @@ class LeafletMap {
       return d => vis.defaultPointSize * (zoomLevel / 4);
     }
   }
-
+  // uses time mag and depth values from selected value to show on graphs
   highlightQuake(quake) {
     let vis = this;
     console.log('Selected quake:', quake);
