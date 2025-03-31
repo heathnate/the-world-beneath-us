@@ -95,9 +95,7 @@ class DepthBarChart {
         .on('mouseleave', () => {
           vis.tooltip.style('opacity', 0);
         })
-      .join('rect')
-        // ... other attributes ... 
-        .on('click', (event, d) => {
+        .on('click', function (event, d) {
           // Check if filter is already active
           const isActive = difficultyFilter.includes(d.length);
           if (isActive) { 
@@ -108,12 +106,13 @@ class DepthBarChart {
             difficultyFilter.push(d.length);
             console.log(difficultyFilter);
           }
+  
           // Call global function to update scatter plot
           filterData();
-          
-          // Add class to style active filters with CSS
-          //d3.select(this).classed('active', !isActive);
-    });
+  
+          // Toggle the 'selected' class for the clicked bar
+          d3.select(this).classed('selected', !isActive);
+        });
   
       bars
         .attr('y', d => vis.yScale(`${d.x0}-${d.x1}`))
