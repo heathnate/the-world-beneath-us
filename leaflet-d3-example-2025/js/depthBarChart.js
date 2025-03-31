@@ -13,7 +13,7 @@ class DepthBarChart {
   
       vis.margin = { top: 20, right: 80, bottom: 70, left: 70 };
       vis.width = 500 - vis.margin.left - vis.margin.right;
-      vis.height = 300 - vis.margin.top - vis.margin.bottom;
+      vis.height = 250 - vis.margin.top - vis.margin.bottom;
   
       vis.svg = d3
         .select(vis.config.parentElement)
@@ -41,10 +41,10 @@ class DepthBarChart {
         .append('text')
         .attr('class', 'y-axis-label')
         .attr('x', -vis.height / 2)
-        .attr('y', -50)
+        .attr('y', -55)
         .attr('text-anchor', 'middle')
         .attr('transform', 'rotate(-90)')
-        .text('Depth Range');
+        .text('Depth Range (km)');
   
       vis.tooltip = d3
         .select('body')
@@ -94,6 +94,24 @@ class DepthBarChart {
         })
         .on('mouseleave', () => {
           vis.tooltip.style('opacity', 0);
+        })
+        .on('click', function (event, d) {
+          // Check if filter is already active
+          const isActive = difficultyFilter.includes(d.length);
+          if (isActive) { 
+            // Remove filter
+            difficultyFilter = difficultyFilter.filter(f => f !== d.length);
+          } else { 
+            // Add filter
+            difficultyFilter.push(d.length);
+            console.log(difficultyFilter);
+          }
+  
+          // Call global function to update scatter plot
+          filterData();
+  
+          // Toggle the 'selected' class for the clicked bar
+          d3.select(this).classed('selected', !isActive);
         });
   
       bars

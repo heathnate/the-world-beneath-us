@@ -13,7 +13,7 @@ class MagnitudeBarChart {
     // Set up dimensions and margins
     vis.margin = { top: 20, right: 80, bottom: 70, left: 70 };
     vis.width = 500 - vis.margin.left - vis.margin.right;
-    vis.height = 300 - vis.margin.top - vis.margin.bottom;
+    vis.height = 225 - vis.margin.top - vis.margin.bottom;
 
     // Create SVG container
     vis.svg = d3
@@ -46,7 +46,7 @@ class MagnitudeBarChart {
       .append('text')
       .attr('class', 'y-axis-label')
       .attr('x', -vis.height / 2)
-      .attr('y', -50)
+      .attr('y', -55)
       .attr('text-anchor', 'middle')
       .attr('transform', 'rotate(-90)')
       .text('Magnitude Range');
@@ -66,9 +66,9 @@ class MagnitudeBarChart {
 
     // Create bins for histogram
     const bin = d3.bin()
-      .domain([0, d3.max(vis.data, vis.attribute)])
+      .domain(d3.extent(vis.data, vis.attribute))
       .value(vis.attribute)
-      .thresholds(8); // Number of bins
+      .thresholds(5); // Number of bins
     const bins = bin(vis.data);
 
     // Update scales
@@ -105,24 +105,22 @@ class MagnitudeBarChart {
       .on('mouseleave', () => {
         vis.tooltip.style('opacity', 0);
       })
-    .join('rect')
-      // ... other attributes ... 
-      .on('click', (event, d) => {
-        // Check if filter is already active
-        const isActive = difficultyFilter.includes(d.length);
-        if (isActive) { 
-          // Remove filter
+      .on('click', function (event, d) {
+                // Toggle the 'selected' class for the clicked bar
+        const isSelected = d3.select(this).classed('selected');
+        d3.select(this).classed('selected', !isSelected); // Toggle selection on clicked bar
+
+        // Update the global filter
+        if (isSelected) {
+          // Remove the bar's value from the filter if it was already selected
           difficultyFilter = difficultyFilter.filter(f => f !== d.length);
-        } else { 
-          // Add filter
+        } else {
+          // Add the bar's value to the filter if it is newly selected
           difficultyFilter.push(d.length);
-          console.log(difficultyFilter);
         }
-        // Call global function to update scatter plot
+
+        // Call global function to update the map
         filterData();
-        
-        // Add class to style active filters with CSS
-        //d3.select(this).classed('active', !isActive);
       });
 
     // Update
