@@ -102,3 +102,10 @@
   padding: 10px;
   box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
 }
+
+/* Highlight selected bar */
+.bar.selected {
+  stroke: black; /* Add a black outline */
+  stroke-width: 3px; /* Make the outline thick */
+  stroke-dasharray: 0 3 3 3; /* Apply dashes only to the top, right, and bottom */
+}

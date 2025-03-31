@@ -105,24 +105,22 @@ class MagnitudeBarChart {
       .on('mouseleave', () => {
         vis.tooltip.style('opacity', 0);
       })
-    .join('rect')
-      // ... other attributes ... 
-      .on('click', (event, d) => {
-        // Check if filter is already active
-        const isActive = difficultyFilter.includes(d.length);
-        if (isActive) { 
-          // Remove filter
+      .on('click', function (event, d) {
+        // Toggle the 'selected' class for the clicked bar
+        const isSelected = d3.select(this).classed('selected');
+        d3.select(this).classed('selected', !isSelected); // Toggle selection on clicked bar
+
+        // Update the global filter
+        if (isSelected) {
+          // Remove the bar's value from the filter if it was already selected
           difficultyFilter = difficultyFilter.filter(f => f !== d.length);
-        } else { 
-          // Add filter
+        } else {
+          // Add the bar's value to the filter if it is newly selected
           difficultyFilter.push(d.length);
-          console.log(difficultyFilter);
         }
-        // Call global function to update scatter plot
+
+        // Call global function to update the map
         filterData();
-        
-        // Add class to style active filters with CSS
-        //d3.select(this).classed('active', !isActive);
       });
 
     // Update
