@@ -1,4 +1,4 @@
-let leafletMap, barChart, magnitudeBarChart, depthBarChart, timeSeriesChart;
+let leafletMap, barChart, magnitudeBarChart, depthBarChart, timeSeriesChart, startDateInput, endDateInput;
 let data;
 
 let difficultyFilter = [];
@@ -37,29 +37,11 @@ d3.csv('data/2024-2025.csv')
     );
 
     // Auto-apply filter when date inputs change
-    const startDateInput = document.getElementById('start-date');
-    const endDateInput = document.getElementById('end-date');
+    startDateInput = document.getElementById('start-date');
+    endDateInput = document.getElementById('end-date');
 
-    function applyDateFilter() {
-      const startDate = new Date(startDateInput.value);
-      const endDate = new Date(endDateInput.value);
-
-      if (startDate && endDate && startDate <= endDate) {
-        // Filter data based on the selected date range
-        const filteredData = data.filter(
-          (d) => d.time >= startDate && d.time <= endDate
-        );
-
-        // Update the time-series chart and map
-        timeSeriesChart.data = filteredData;
-        timeSeriesChart.updateVis();
-        leafletMap.data = filteredData;
-        leafletMap.updateVis();
-      }
-    }
-
-    startDateInput.addEventListener('change', applyDateFilter);
-    endDateInput.addEventListener('change', applyDateFilter);
+    startDateInput.addEventListener('change', filterData);
+    endDateInput.addEventListener('change', filterData);
 
     // Reset button to restore full data range
     document.getElementById('reset-date-filter').addEventListener('click', () => {
@@ -87,11 +69,13 @@ function preprocessQuakeData(rawData) {
   }));
 }
 function filterData() {
-  let fdata, bdata, ndata, a, b, c, e, f, g, h, i, j, k, l;
+  let fdata, bdata, ndata, filteredData, check, check2;
+  let a, b, c, e, f, g, h, i, j, k, l;
   check = false;
   check2 = false;
   fdata = data;
   bdata = data;
+  filteredData = data;
   a = data.filter(d => (0 > d.mag));
   b = data.filter(d => (0 > d.mag));
   c = data.filter(d => (0 > d.mag));
@@ -183,8 +167,22 @@ function filterData() {
       bdata = data.filter(d => (f.includes(d) || g.includes(d) || h.includes(d) || i.includes(d) || j.includes(d) || k.includes(d) || l.includes(d)));
     }
   }
-  ndata = data.filter(d => fdata.includes(d) && bdata.includes(d))
+
+  const startDate = new Date(startDateInput.value);
+  const endDate = new Date(endDateInput.value);
+
+  if (startDate && endDate && startDate <= endDate) {
+    // Filter data based on the selected date range
+    filteredData = data.filter((d) => d.time >= startDate && d.time <= endDate);
+
+    // Update the time-series chart
+    timeSeriesChart.data = filteredData;
+    timeSeriesChart.updateVis();
+  }
+
+  ndata = data.filter(d => fdata.includes(d) && bdata.includes(d) && filteredData.includes(d))
   console.log(ndata);
+
   leafletMap.data = ndata;
   leafletMap.updateVis();
 }
