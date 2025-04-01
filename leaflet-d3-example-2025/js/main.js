@@ -31,8 +31,8 @@ d3.csv('data/2024-2025.csv')
         leafletMap.data = filteredData;
         leafletMap.updateVis(); // Ensure the map updates
 
-        magnitudeBarChart.setFilteredData(filteredData);
-        depthBarChart.setFilteredData(filteredData);
+        //magnitudeBarChart.setFilteredData(filteredData);
+        //depthBarChart.setFilteredData(filteredData);
       }
     );
 
@@ -180,6 +180,9 @@ function filterData() {
     timeSeriesChart.updateVis();
   }
 
+  console.log(fdata);
+  console.log(bdata);
+  console.log(filteredData);
   ndata = data.filter(d => fdata.includes(d) && bdata.includes(d) && filteredData.includes(d))
   console.log(ndata);
 
