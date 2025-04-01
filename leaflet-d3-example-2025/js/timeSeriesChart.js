@@ -60,6 +60,21 @@ class TimeSeriesChart {
         if (selection) {
           const [x0, x1] = selection.map(vis.xScale.invert);
           vis.onBrush(x0, x1);
+          const powpow = new Date(x0);
+          const d1 = String(powpow.getDate()).padStart(2, '0');
+          const d2 = String(powpow.getMonth() + 1).padStart(2, '0');
+          const d3 = String(powpow.getFullYear());
+          const sDateInput = document.getElementById('start-date');
+          sDateInput.value = d3 + '-' + d2 + '-' + d1;
+
+          const powpow2 = new Date(x1);
+          console.log(powpow2);
+          const d12 = String(powpow2.getDate()).padStart(2, '0');
+          const d22 = String(powpow2.getMonth() + 1).padStart(2, '0');
+          const d32 = String(powpow2.getFullYear());
+          const eDateInput = document.getElementById('end-date');
+          eDateInput.value = d32 + '-' + d22 + '-' + d12;
+
         }
       })
       .on("end", function ({ selection }) {
