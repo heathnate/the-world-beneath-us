@@ -10,9 +10,13 @@ data link: https://github.com/elipappas/VID_Project2/blob/main/leaflet-d3-exampl
 
 **This time, include a section with your design sketches and design justifications.**  
 
-**1 section on what your application enables you to discover: Present some findings you arrive at with your application.**  
+**1 section on what your application enables you to discover: Present some findings you arrive at with your application.**
+
+Our application allows one to discover fault lines in the earth's crust. You can also see how deep these fault lines go by filtering by depth and filtering by time shows the frequency of earthquake events. You can very easily find that many of the most active areas are on top of the deepest fault lines. You can also see that many earthquakes occur within a small area within a very short time frame, so what we might feel as a single earthquake could be many shifts in the earth's crust propogated out from a single event. 
 
 **1 section on your process- what libraries did you use?  How did you structure your code?  How can you access it and run it?  Link to your code (and the live application, if it is deployed online).**  
+
+We structured our code in an object-oriented manner. Each area in the visualization has it's own object whose class definition can be found in one of the files depthBarChart.js, leafletMap.js, magnitudeBarChart.js, and timeSeriesChart.js. We used uninitialized variables that are later defined and passed functions as arguments to the visualization constructors in the main script for connecting the different components together (such as giving the timeSeriesChart brushing the ability to filter the data shown in the leafletMap and more). As long the browser the webpage is accessed with can run javascript, the application can be run simply by opening the index.html file. Our application is also hosted at: https://elipappas.github.io/VID_Project2/leaflet-d3-example-2025/ .
 
 **Include a 2-3 minute demo video, showing your application in action.  The easiest way to record this is with a screen capture tool, which also captures audio- such as Quicktime.  Use a voiceover or video captions to explain your application.  Demo videos should be sufficient on their own, but can reference your documentation.  Include the name of the project, your name, the project components, and how your application works.  You can present it on your webpage or on youtube, but linked on your webpage.** 
 
@@ -22,3 +26,5 @@ https://youtu.be/SqJMKjUhsto
 Eli Pappas - Level 2, Level 6 (show quake clicked on in the graph and bar charts), assisted with styling for clickability on charts
 
 Nate Heath - Level 1, Level 3
+
+Freja Kahle - Level 5, assisted in bug fixing for level 4
