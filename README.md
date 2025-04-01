@@ -18,11 +18,29 @@ data link: https://github.com/elipappas/VID_Project2/blob/main/leaflet-d3-exampl
 
 **1 section on what your application enables you to discover: Present some findings you arrive at with your application.**
 
-Our application allows one to discover fault lines in the earth's crust. You can also see how deep these fault lines go by filtering by depth and filtering by time shows the frequency of earthquake events. You can very easily find that many of the most active areas are on top of the deepest fault lines. You can also see that many earthquakes occur within a small area within a very short time frame, so what we might feel as a single earthquake could be many shifts in the earth's crust propogated out from a single event. 
+Our application allows one to discover fault lines in the earth's crust.
+
+![image](https://github.com/user-attachments/assets/46d98cd9-4c7d-4db1-b4d4-2c03db68d9ee)
+
+You can also see how deep these fault lines go by filtering by depth and filtering by time shows the frequency of earthquake events. You can very easily find that many of the most active areas are on top of the deepest fault lines. 
+
+![image](https://github.com/user-attachments/assets/094eb746-764d-40c5-b2ed-595fb53a7613)
+
+You can also see that many earthquakes occur within a small area within a very short time frame, so what we might feel as a single earthquake could be many shifts in the earth's crust propogated out from a single event. 
+
+![image](https://github.com/user-attachments/assets/03bad7b9-ae72-4926-af1e-fb64a951361c)
 
 **1 section on your process- what libraries did you use?  How did you structure your code?  How can you access it and run it?  Link to your code (and the live application, if it is deployed online).**  
 
-We structured our code in an object-oriented manner. The only external library we used was [D3](https://d3js.org/). Each area in the visualization has it's own object whose class definition can be found in one of the files depthBarChart.js, leafletMap.js, magnitudeBarChart.js, and timeSeriesChart.js. We used uninitialized variables that are later defined and passed functions as arguments to the visualization constructors in the main script for connecting the different components together (such as giving the timeSeriesChart brushing the ability to filter the data shown in the leafletMap and more). As long as the browser the webpage is accessed with can run javascript, the application can be run simply by opening the index.html file. Our application is also hosted at: https://elipappas.github.io/VID_Project2/leaflet-d3-example-2025/ .
+We structured our code in an object-oriented manner. The only external library we used was [D3](https://d3js.org/). Each area in the visualization has it's own object whose class definition can be found in one of the files depthBarChart.js, leafletMap.js, magnitudeBarChart.js, and timeSeriesChart.js.
+
+![image](https://github.com/user-attachments/assets/46ac15e7-96c7-49b3-be32-11d0ca7dda78)
+
+We used uninitialized variables that are later defined and passed functions as arguments to the visualization constructors in the main script for connecting the different components together (such as giving the timeSeriesChart brushing the ability to filter the data shown in the leafletMap and more). 
+
+![image](https://github.com/user-attachments/assets/dfda7272-47bf-4292-9a9e-7d63efd9811b) 
+
+As long as the browser the webpage is accessed with can run javascript, the application can be run simply by opening the index.html file. Our application is also hosted at: https://elipappas.github.io/VID_Project2/leaflet-d3-example-2025/ .
 
 **Include a 2-3 minute demo video, showing your application in action.  The easiest way to record this is with a screen capture tool, which also captures audio- such as Quicktime.  Use a voiceover or video captions to explain your application.  Demo videos should be sufficient on their own, but can reference your documentation.  Include the name of the project, your name, the project components, and how your application works.  You can present it on your webpage or on youtube, but linked on your webpage.** 
 
