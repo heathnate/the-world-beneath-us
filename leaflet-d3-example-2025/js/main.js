@@ -179,12 +179,7 @@ function filterData() {
     timeSeriesChart.data = filteredData;
     timeSeriesChart.updateVis();
   }
-
-  console.log(fdata);
-  console.log(bdata);
-  console.log(filteredData);
   ndata = data.filter(d => fdata.includes(d) && bdata.includes(d) && filteredData.includes(d))
-  console.log(ndata);
 
   leafletMap.data = ndata;
   leafletMap.updateVis();
