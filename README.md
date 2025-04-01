@@ -15,6 +15,7 @@ data link: https://github.com/elipappas/VID_Project2/blob/main/leaflet-d3-exampl
 **1 section on your process- what libraries did you use?  How did you structure your code?  How can you access it and run it?  Link to your code (and the live application, if it is deployed online).**  
 
 **Include a 2-3 minute demo video, showing your application in action.  The easiest way to record this is with a screen capture tool, which also captures audio- such as Quicktime.  Use a voiceover or video captions to explain your application.  Demo videos should be sufficient on their own, but can reference your documentation.  Include the name of the project, your name, the project components, and how your application works.  You can present it on your webpage or on youtube, but linked on your webpage.** 
+
 https://youtu.be/SqJMKjUhsto 
 
 **This time, document who on your team did which component of the project.  Ex.  If someone worked on the data, and on bar charts, list their effort on these components.**  
