@@ -13,8 +13,12 @@ And finally we use bar charts to show magnitude and depth as well as a line char
 data link: https://github.com/elipappas/VID_Project2/blob/main/leaflet-d3-example-2025/data/2024-2025.csv
 
 **Explain each view of the data, the GUI, etc.  Explain how you can interact with your application, and how the views update in response to these interactions.**   
+The page starts by drawing the users attention to the leaflet map, which shows a dot at the location of each earthquake, each of which displays more data if the user hovers over them. The map also allows for zooming in to get a closer look at any specific geographic location. To the right of the map are two bar charts, these show the number of earthquakes sorted by magnitude or depth. If the user selectes a bar the leaflet map filters its data to only show the earthquakes represented by that bar. Meaning if you only want to see where earthquakes of a specific magnitude were located you could do so by selecting the appropriate bar. Finally there is a time series chart below the map, which shows the frequency of earthquakes over time. If the user selects a range in this it also filters the leaflet map, showing only the earthquakes that happened over a specific time span. This can also be achieved by manually selecting dates in a selection above the leaflet map.
 
 **This time, include a section with your design sketches and design justifications.**  
+![image](https://github.com/elipappas/VID_Project2/blob/main/leaflet-d3-example-2025/images/project%202%20sketch.png)
+We were not certain what to design our page to look like, but we knew what elements were needed and chose a layout that highlights the central elements, the leaflet map, while supporting it and filling all available space so that no scrolling is required on the page.
+
 
 **1 section on what your application enables you to discover: Present some findings you arrive at with your application.**
 
