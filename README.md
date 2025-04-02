@@ -56,3 +56,5 @@ Eli Pappas - Level 2, Level 6 (show quake clicked on in the graph and bar charts
 Nate Heath - Level 1, Level 3
 
 Freja Kahle - Level 5, assisted in bug fixing for level 4
+
+Nick Bryant - Level 4
